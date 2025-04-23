@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Modal, StatusBar } from "react-native";
 
-// Simulando dados do usuário (você pode pegar esses dados da API ou do estado global depois)
 const usuarioMock = {
     nome: "Kauã",
     email: "kaua@email.com",
