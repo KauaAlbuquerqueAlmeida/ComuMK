@@ -15,7 +15,7 @@ const realizarLogin = ({ navigation }) => {
                 alert('Login realizado com sucesso!');
             })
             .catch((error) => {
-                console.error('Login failed:', error);
+                console.error('Login falho:', error);
             });
     }
     return (
