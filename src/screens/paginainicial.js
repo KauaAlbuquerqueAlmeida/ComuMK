@@ -1,16 +1,23 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, StatusBar } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  StatusBar,
+  FlatList,
+} from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 
+// ----- Tela de Cadastro -----
 export function Cadastro({ navigation }) {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [telefone, setTelefone] = useState("");
 
   const handleCadastro = () => {
-    const usuarioMock = {
-      nome,
-      email,
-    };
+    const usuarioMock = { nome, email };
     navigation.navigate("PaginaPrincipal", { usuarioMock });
   };
 
@@ -41,23 +48,55 @@ export function Cadastro({ navigation }) {
   );
 }
 
+// ----- Página Inicial -----
 export function Paginainicial({ navigation, route }) {
   const { usuarioMock } = route.params;
   const [modalVisible, setModalVisible] = useState(false);
+  const [notificationVisible, setNotificationVisible] = useState(false);
+  const [notificacoes, setNotificacoes] = useState([]);
+
   const primeiraLetra = usuarioMock.nome.charAt(0).toUpperCase();
+
+  useEffect(() => {
+    // Simulação local de notificações
+    const notificacoesMock = [
+      {
+        id: "1",
+        titulo: "Bem-vindo!",
+        mensagem: "Obrigado por se cadastrar, " + usuarioMock.nome + "!",
+      },
+      {
+        id: "2",
+        titulo: "Novidade!",
+        mensagem: "Nosso novo chat já está disponível!",
+      },
+    ];
+    setNotificacoes(notificacoesMock);
+  }, []);
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#0d1117" />
 
       <View style={styles.header}>
-        <TouchableOpacity style={styles.profileCircle} onPress={() => setModalVisible(true)}>
+        <TouchableOpacity
+          style={styles.notificationIcon}
+          onPress={() => setNotificationVisible(true)}
+        >
+          <Icon name="envelope" size={22} color="#c9d1d9" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.profileCircle}
+          onPress={() => setModalVisible(true)}
+        >
           <Text style={styles.profileLetter}>{primeiraLetra}</Text>
         </TouchableOpacity>
       </View>
 
+      {/* Modal de Perfil */}
       <Modal
-        transparent={true}
+        transparent
         visible={modalVisible}
         animationType="fade"
         onRequestClose={() => setModalVisible(false)}
@@ -77,6 +116,16 @@ export function Paginainicial({ navigation, route }) {
               <Text style={styles.editButtonText}>Editar Perfil</Text>
             </TouchableOpacity>
 
+            <TouchableOpacity
+              style={styles.logoutButton}
+              onPress={() => {
+                setModalVisible(false);
+                navigation.navigate("login");
+              }}
+            >
+              <Text style={styles.logoutText}>Sair</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text style={styles.closeText}>Fechar</Text>
             </TouchableOpacity>
@@ -84,7 +133,47 @@ export function Paginainicial({ navigation, route }) {
         </View>
       </Modal>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Chat")}>
+      {/* Modal de Notificações */}
+      <Modal
+        transparent
+        visible={notificationVisible}
+        animationType="slide"
+        onRequestClose={() => setNotificationVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { maxHeight: "70%" }]}>
+            <Text style={styles.modalTitle}>Notificações</Text>
+
+            {notificacoes.length === 0 ? (
+              <Text style={{ color: "#8b949e", textAlign: "center" }}>
+                Nenhuma notificação ainda.
+              </Text>
+            ) : (
+              <FlatList
+                data={notificacoes}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <View style={{ marginBottom: 10 }}>
+                    <Text style={{ color: "#fff" }}>{item.titulo}</Text>
+                    <Text style={{ color: "#8b949e", fontSize: 12 }}>
+                      {item.mensagem}
+                    </Text>
+                  </View>
+                )}
+              />
+            )}
+
+            <TouchableOpacity onPress={() => setNotificationVisible(false)}>
+              <Text style={styles.closeText}>Fechar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Chat")}
+      >
         <Text style={styles.buttonText}>Chate</Text>
       </TouchableOpacity>
 
@@ -92,7 +181,9 @@ export function Paginainicial({ navigation, route }) {
         style={[styles.button, styles.secondaryButton]}
         onPress={() => navigation.navigate("Cadastro")}
       >
-        <Text style={[styles.buttonText, styles.secondaryButtonText]}>Conversar</Text>
+        <Text style={[styles.buttonText, styles.secondaryButtonText]}>
+          Conversar
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -151,6 +242,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#2f333a",
   },
+  notificationIcon: {
+    marginRight: 15,
+  },
   profileCircle: {
     backgroundColor: "#1da1f2",
     width: 40,
@@ -203,6 +297,17 @@ const styles = StyleSheet.create({
   editButtonText: {
     color: "#fff",
     fontWeight: "600",
+  },
+  logoutButton: {
+    marginTop: 10,
+    backgroundColor: "#ff5555",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+  },
+  logoutText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
   closeText: {
     color: "#8b949e",
