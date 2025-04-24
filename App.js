@@ -9,6 +9,8 @@ import Login from "./src/screens/login";
 import Cadastro from "./src/screens/cadastro";
 import SplashScreen from "./src/screens/SplashScreen";
 import chate from "./src/screens/chate";
+import conversar from "./src/screens/conversar";
+import ConversaInd from "./src/screens/ConversaIndividual";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +32,8 @@ export default function App() {
         ) : (
           <>
             <Stack.Screen name="login" component={Login} />
+            <Stack.Screen name="ConversaInd" component={ConversaInd } />
+            <Stack.Screen name="conversar" component={conversar} />
             <Stack.Screen name="chate" component={chate} />
             <Stack.Screen name="Paginainicial" component={Paginainicial} />
             <Stack.Screen name="cadastro" component={Cadastro} />
