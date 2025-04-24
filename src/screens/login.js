@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import app from '../../firebaseConfig';
 
-const realizarLogin = ({ navigation }) => {
+const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
@@ -15,7 +15,7 @@ const realizarLogin = ({ navigation }) => {
                 alert('Login realizado com sucesso!');
             })
             .catch((error) => {
-                console.error('Login failed:', error);
+                console.error('Login falho:', error);
             });
     }
     return (
@@ -74,4 +74,4 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 });
-export default realizarLogin;
+export default Login;
