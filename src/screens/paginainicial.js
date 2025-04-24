@@ -1,3 +1,4 @@
+// Paginainicial.js
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -10,69 +11,42 @@ import {
   FlatList,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { useIsFocused } from "@react-navigation/native";
 
-// ----- Tela de Cadastro -----
-export function Cadastro({ navigation }) {
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-
-  const handleCadastro = () => {
-    const usuarioMock = { nome, email };
-    navigation.navigate("PaginaPrincipal", { usuarioMock });
-  };
-
-  return (
-    <View style={stylesCadastro.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#0d1117" />
-      <Text style={stylesCadastro.title}>Cadastro</Text>
-
-      <TextInput
-        style={stylesCadastro.input}
-        placeholder="Nome"
-        placeholderTextColor="#8b949e"
-        value={nome}
-        onChangeText={setNome}
-      />
-      <TextInput
-        style={stylesCadastro.input}
-        placeholder="Email"
-        placeholderTextColor="#8b949e"
-        value={email}
-        onChangeText={setEmail}
-      />
-
-      <TouchableOpacity style={stylesCadastro.button} onPress={handleCadastro}>
-        <Text style={stylesCadastro.buttonText}>Cadastrar</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-// ----- Página Inicial -----
 export function Paginainicial({ navigation, route }) {
   const { usuarioMock } = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [notificationVisible, setNotificationVisible] = useState(false);
   const [notificacoes, setNotificacoes] = useState([]);
+  const isFocused = useIsFocused();
 
   const primeiraLetra = usuarioMock.nome.charAt(0).toUpperCase();
 
   useEffect(() => {
-    // Simulação local de notificações
-    const notificacoesMock = [
-      {
-        id: "1",
-        titulo: "Bem-vindo!",
-        mensagem: "Obrigado por se cadastrar, " + usuarioMock.nome + "!",
-      },
-      {
-        id: "2",
-        titulo: "Novidade!",
-        mensagem: "Nosso novo chat já está disponível!",
-      },
-    ];
-    setNotificacoes(notificacoesMock);
-  }, []);
+    if (isFocused) {
+      // Verifica se há novas mensagens simuladas em AsyncStorage
+      verificarNotificacoes();
+    }
+  }, [isFocused]);
+
+  const verificarNotificacoes = async () => {
+    try {
+      const novasMensagensChatGeral = await AsyncStorage.getItem("mensagensChatGeral");
+      const mensagens = JSON.parse(novasMensagensChatGeral) || [];
+      const novas = mensagens.filter((msg) => msg.destinatario === "geral");
+
+      if (novas.length > 0) {
+        const notificacoesGeradas = novas.map((msg, index) => ({
+          id: `${index}-${Date.now()}`,
+          titulo: `Nova mensagem de ${msg.remetente}`,
+          mensagem: msg.texto,
+        }));
+        setNotificacoes(notificacoesGeradas);
+      }
+    } catch (err) {
+      console.error("Erro ao verificar notificações:", err);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -94,7 +68,7 @@ export function Paginainicial({ navigation, route }) {
         </TouchableOpacity>
       </View>
 
-      {/* Modal de Perfil */}
+      {/* Modal Perfil */}
       <Modal
         transparent
         visible={modalVisible}
@@ -132,7 +106,8 @@ export function Paginainicial({ navigation, route }) {
           </View>
         </View>
       </Modal>
-      {/* Modal de Notificações */}
+
+      {/* Modal Notificações */}
       <Modal
         transparent
         visible={notificationVisible}
@@ -170,7 +145,6 @@ export function Paginainicial({ navigation, route }) {
       </Modal>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("chate")}>
-
         <Text style={styles.buttonText}>Chat Geral</Text>
       </TouchableOpacity>
 
@@ -186,43 +160,6 @@ export function Paginainicial({ navigation, route }) {
   );
 }
 
-// Estilos da tela de Cadastro
-const stylesCadastro = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#0d1117",
-    padding: 20,
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 28,
-    color: "#fff",
-    fontWeight: "bold",
-    marginBottom: 30,
-    textAlign: "center",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#2f333a",
-    backgroundColor: "#161b22",
-    color: "#ffffff",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-  },
-  button: {
-    backgroundColor: "#1da1f2",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-});
-
-// Estilos da Página Principal
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -267,11 +204,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "80%",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 10,
   },
   modalTitle: {
     fontSize: 22,
@@ -321,11 +253,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     width: "80%",
     alignSelf: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 6,
-    elevation: 5,
   },
   buttonText: {
     color: "#fff",
@@ -333,12 +260,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textTransform: "uppercase",
     letterSpacing: 1,
-  },
-  secondaryButton: {
-    backgroundColor: "#c9d1d9",
-  },
-  secondaryButtonText: {
-    color: "#0d1117",
   },
 });
 
