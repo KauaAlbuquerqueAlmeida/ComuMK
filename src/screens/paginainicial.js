@@ -171,7 +171,7 @@ export function Paginainicial({ navigation, route }) {
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("chate")}>
 
-        <Text style={styles.buttonText}>Chat</Text>
+        <Text style={styles.buttonText}>Chat Geral</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
