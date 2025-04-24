@@ -1,3 +1,4 @@
+// Kauã e Miguel Borges
 import React, { useEffect } from "react";
 import { View, Image, StyleSheet, Animated } from "react-native";
 

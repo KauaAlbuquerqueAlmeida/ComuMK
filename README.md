@@ -1,3 +1,4 @@
+// Kauã e Miguel Borges
 npm install --global expo-cli  
 npx expo install react-native-web react-dom @expo/metro-runtime
 npm install

@@ -1,4 +1,4 @@
-// Paginainicial.js
+// Kauã e Miguel Borges
 import React, { useState, useEffect } from "react";
 import {
   View,
