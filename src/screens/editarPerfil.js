@@ -64,13 +64,6 @@ export default function EditarPerfil({ navigation, route }) {
       />
       <TextInput
         style={styles.input}
-        placeholder="Telefone"
-        placeholderTextColor="#8b949e"
-        value={telefone}
-        onChangeText={setTelefone}
-      />
-      <TextInput
-        style={styles.input}
         placeholder="Nova senha (opcional)"
         placeholderTextColor="#8b949e"
         secureTextEntry
