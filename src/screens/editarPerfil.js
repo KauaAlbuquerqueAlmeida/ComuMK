@@ -50,13 +50,6 @@ export default function EditarPerfil({ navigation, route }) {
 
       <TextInput
         style={styles.input}
-        placeholder="Nome"
-        placeholderTextColor="#8b949e"
-        value={nome}
-        onChangeText={setNome}
-      />
-      <TextInput
-        style={styles.input}
         placeholder="Email"
         placeholderTextColor="#8b949e"
         value={email}
