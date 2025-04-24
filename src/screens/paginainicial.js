@@ -93,7 +93,7 @@ export function Paginainicial({ navigation, route }) {
         </View>
       </Modal>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Chat")}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("chate")}>
         <Text style={styles.buttonText}>Chate</Text>
       </TouchableOpacity>
 
