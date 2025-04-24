@@ -10,7 +10,6 @@ export function Cadastro({ navigation }) {
     const usuarioMock = {
       nome,
       email,
-      telefone,
     };
     navigation.navigate("PaginaPrincipal", { usuarioMock });
   };
@@ -33,13 +32,6 @@ export function Cadastro({ navigation }) {
         placeholderTextColor="#8b949e"
         value={email}
         onChangeText={setEmail}
-      />
-      <TextInput
-        style={stylesCadastro.input}
-        placeholder="Telefone"
-        placeholderTextColor="#8b949e"
-        value={telefone}
-        onChangeText={setTelefone}
       />
 
       <TouchableOpacity style={stylesCadastro.button} onPress={handleCadastro}>
@@ -74,7 +66,6 @@ export function Paginainicial({ navigation, route }) {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>{usuarioMock.nome}</Text>
             <Text style={styles.modalText}>{usuarioMock.email}</Text>
-            <Text style={styles.modalText}>{usuarioMock.telefone}</Text>
 
             <TouchableOpacity
               style={styles.editButton}
