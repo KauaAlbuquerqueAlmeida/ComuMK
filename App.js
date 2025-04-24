@@ -8,6 +8,7 @@ import EditarPerfil from "./src/screens/editarPerfil";
 import Login from "./src/screens/login";
 import Cadastro from "./src/screens/cadastro";
 import SplashScreen from "./src/screens/SplashScreen";
+import chate from "./src/screens/chate";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ export default function App() {
         ) : (
           <>
             <Stack.Screen name="login" component={Login} />
+            <Stack.Screen name="chate" component={chate} />
             <Stack.Screen name="Paginainicial" component={Paginainicial} />
             <Stack.Screen name="cadastro" component={Cadastro} />
             <Stack.Screen name="perfil" component={Perfil} />

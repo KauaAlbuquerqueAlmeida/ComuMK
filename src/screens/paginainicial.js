@@ -133,6 +133,7 @@ export function Paginainicial({ navigation, route }) {
         </View>
       </Modal>
 
+<<<<<<< HEAD
       {/* Modal de Notificações */}
       <Modal
         transparent
@@ -174,6 +175,9 @@ export function Paginainicial({ navigation, route }) {
         style={styles.button}
         onPress={() => navigation.navigate("Chat")}
       >
+=======
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("chate")}>
+>>>>>>> 27d71dcf3b552e2e5f77a1f4ab31dedf86a7a66f
         <Text style={styles.buttonText}>Chate</Text>
       </TouchableOpacity>
 
