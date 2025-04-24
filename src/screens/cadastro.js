@@ -13,10 +13,11 @@ import app from '../../firebaseConfig';
 const Cadastro = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [nome, setnome] = useState('');
 
   const criarConta = () => {
     const auth = getAuth(app);
-    createUserWithEmailAndPassword(auth, email, senha)
+    createUserWithEmailAndPassword(auth, email, senha, nome)
       .then(() => {
         alert('Conta criada com sucesso!');
         navigation.navigate('login');
@@ -53,6 +54,15 @@ const Cadastro = ({ navigation }) => {
         onChangeText={setSenha}
         secureTextEntry={true}
         autoCapitalize="none"
+      />
+
+        <TextInput
+        style={styles.input}
+        placeholder=" nome"
+        placeholderTextColor="#ccc"
+        onChangeText={setnome}
+        secureTextEntry={true}
+        autoCapitalize="nome"
       />
 
       <TouchableOpacity style={styles.button} onPress={criarConta}>
