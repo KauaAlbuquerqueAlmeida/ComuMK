@@ -11,15 +11,26 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import app from '../../firebaseConfig';
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
 
   const tentarLogar = () => {
     const auth = getAuth(app);
     signInWithEmailAndPassword(auth, email, senha)
-      .then(() => {
-        navigation.navigate('Paginainicial');
+      .then((userCredential) => {
+        const user = userCredential.user;
+
+        const usuarioMock = {
+          nome: user.displayName || "Usuário",
+          email: user.email,
+          telefone: user.phoneNumber || "Não informado",
+          uid: user.uid,
+        };
+
         alert('Login realizado com sucesso!');
+        setEmail("");
+        setSenha("");
+        navigation.navigate('Paginainicial', { usuarioMock });
       })
       .catch((error) => {
         console.error('Login falho:', error);
@@ -30,7 +41,7 @@ const Login = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../assets/mkpet-removebg-preview.png')}
+        source={require('../../assets/comumk.png')}
         style={styles.logo}
         resizeMode="contain"
       />
@@ -44,6 +55,7 @@ const Login = ({ navigation }) => {
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
+        value={email}
       />
 
       <TextInput
@@ -53,6 +65,7 @@ const Login = ({ navigation }) => {
         onChangeText={setSenha}
         secureTextEntry={true}
         autoCapitalize="none"
+        value={senha}
       />
 
       <TouchableOpacity style={styles.button} onPress={tentarLogar}>
@@ -70,61 +83,14 @@ const Login = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  logo: {
-    height: 120,
-    width: 120,
-    marginBottom: 30,
-  },
-  title: {
-    fontSize: 24,
-    color: '#fff',
-    marginBottom: 20,
-    fontWeight: 'bold',
-  },
-  input: {
-    width: '100%',
-    height: 48,
-    backgroundColor: '#1a1a1a',
-    color: '#fff',
-    borderRadius: 12,
-    paddingHorizontal: 15,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#444',
-  },
-  button: {
-    width: '100%',
-    backgroundColor: '#4CAF50',
-    padding: 14,
-    borderRadius: 12,
-    marginTop: 10,
-  },
-  buttonText: {
-    color: '#000',
-    fontSize: 16,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  cadastroButton: {
-    width: '100%',
-    backgroundColor: '#89CFF0', // azul pastel
-    padding: 14,
-    borderRadius: 12,
-    marginTop: 12,
-  },
-  cadastroText: {
-    color: '#000',
-    fontSize: 16,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
+  container: { flex: 1, backgroundColor: '#000', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 },
+  logo: { height: 120, width: 120, marginBottom: 30 },
+  title: { fontSize: 24, color: '#fff', marginBottom: 20, fontWeight: 'bold' },
+  input: { width: '100%', height: 48, backgroundColor: '#1a1a1a', color: '#fff', borderRadius: 12, paddingHorizontal: 15, marginBottom: 16, borderWidth: 1, borderColor: '#444' },
+  button: { width: '100%', backgroundColor: '#4CAF50', padding: 14, borderRadius: 12, marginTop: 10 },
+  buttonText: { color: '#000', fontSize: 16, textAlign: 'center', fontWeight: 'bold' },
+  cadastroButton: { width: '100%', backgroundColor: '#89CFF0', padding: 14, borderRadius: 12, marginTop: 12 },
+  cadastroText: { color: '#000', fontSize: 16, textAlign: 'center', fontWeight: 'bold' },
 });
 
 export default Login;

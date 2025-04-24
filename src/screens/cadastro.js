@@ -30,7 +30,7 @@ const Cadastro = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../assets/mkpet-removebg-preview.png')} // ajuste o caminho
+        source={require('../../assets/comumk.png')} // ajuste o caminho
         style={styles.logo}
         resizeMode="contain"
       />

@@ -23,7 +23,7 @@ export default function SplashScreen() {
   return (
     <View style={styles.container}>
       <Animated.Image
-        source={require("../../assets/mkpet-removebg-preview.png")}
+        source={require("../../assets/comumk.png")}
         style={[styles.logo, { opacity: fadeAnim }]}
         resizeMode="contain"
       />
