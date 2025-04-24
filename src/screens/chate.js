@@ -7,7 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Platform
+  Platform,
 } from 'react-native';
 import {
   getFirestore,
@@ -18,15 +18,17 @@ import {
   orderBy,
   getDocs,
   where,
-  onSnapshot
+  onSnapshot,
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import app from '../../firebaseConfig';
+import { Ionicons } from '@expo/vector-icons'; // usando expo
+// Se não estiver usando expo, pode instalar com: npm install react-native-vector-icons
 
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const ChatScreen = () => {
+const ChatScreen = ({ navigation }) => {
   const [mensagem, setMensagem] = useState('');
   const [mensagens, setMensagens] = useState([]);
   const [usuarioEmail, setUsuarioEmail] = useState('');
@@ -78,6 +80,14 @@ const ChatScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
+      {/* Cabeçalho com setinha */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Chat</Text>
+      </View>
+
       <FlatList
         data={mensagens}
         keyExtractor={item => item.id}
@@ -114,6 +124,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#121212',
     paddingHorizontal: 10,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 50,
+    paddingBottom: 15,
+    paddingHorizontal: 10,
+    backgroundColor: '#1a1a1a',
+    borderBottomWidth: 1,
+    borderColor: '#333',
+  },
+  headerTitle: {
+    fontSize: 20,
+    color: '#fff',
+    marginLeft: 10,
+    fontWeight: 'bold',
   },
   mensagemContainer: {
     padding: 10,
@@ -170,4 +196,3 @@ const styles = StyleSheet.create({
 });
 
 export default ChatScreen;
-
