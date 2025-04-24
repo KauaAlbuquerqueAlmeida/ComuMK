@@ -176,7 +176,7 @@ export function Paginainicial({ navigation, route }) {
 
       <TouchableOpacity
         style={[styles.button, styles.secondaryButton]}
-        onPress={() => navigation.navigate("Cadastro")}
+        onPress={() => navigation.navigate("conversar")}
       >
         <Text style={[styles.buttonText, styles.secondaryButtonText]}>
           Conversar
