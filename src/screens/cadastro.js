@@ -8,30 +8,41 @@ import {
   Image,
 } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import app from '../../firebaseConfig';
 
 const Cadastro = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [nome, setnome] = useState('');
+  const [nome, setNome] = useState('');
 
-  const criarConta = () => {
+  const criarConta = async () => {
     const auth = getAuth(app);
-    createUserWithEmailAndPassword(auth, email, senha, nome)
-      .then(() => {
-        alert('Conta criada com sucesso!');
-        navigation.navigate('login');
-      })
-      .catch((error) => {
-        console.error('Erro ao cadastrar:', error);
-        alert('Erro ao criar conta. Verifique os dados.');
+    const db = getFirestore(app);
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+      const user = userCredential.user;
+
+      // Adiciona usuário ao Firestore
+      await addDoc(collection(db, 'usuarios'), {
+        uid: user.uid,
+        nome: nome,
+        email: user.email,
       });
+
+      alert('Conta criada com sucesso!');
+      navigation.navigate('login');
+    } catch (error) {
+      console.error('Erro ao cadastrar:', error);
+      alert('Erro ao criar conta. Verifique os dados.');
+    }
   };
 
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../assets/comumk.png')} // ajuste o caminho
+        source={require('../../assets/comumk.png')}
         style={styles.logo}
         resizeMode="contain"
       />
@@ -56,13 +67,12 @@ const Cadastro = ({ navigation }) => {
         autoCapitalize="none"
       />
 
-        <TextInput
+      <TextInput
         style={styles.input}
-        placeholder=" nome"
+        placeholder="Nome"
         placeholderTextColor="#ccc"
-        onChangeText={setnome}
-        secureTextEntry={true}
-        autoCapitalize="nome"
+        onChangeText={setNome}
+        autoCapitalize="words"
       />
 
       <TouchableOpacity style={styles.button} onPress={criarConta}>
@@ -124,7 +134,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     width: '100%',
-    backgroundColor: '#89CFF0', // azul pastel
+    backgroundColor: '#89CFF0',
     padding: 14,
     borderRadius: 12,
     marginTop: 12,
